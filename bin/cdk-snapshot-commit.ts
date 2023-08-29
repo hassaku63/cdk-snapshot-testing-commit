@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { CdkSnapshotCommitStack } from '../lib/cdk-snapshot-commit-stack';
+import { TestStack } from '../lib/test-slack';
 
 const app = new cdk.App();
-new CdkSnapshotCommitStack(app, 'CdkSnapshotCommitStack', {
+new TestStack(app, 'CdkSnapshotCommitStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
