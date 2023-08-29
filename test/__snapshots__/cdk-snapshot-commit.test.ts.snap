@@ -42,6 +42,11 @@ exports[`Snapshot testing Test Stack 1`] = `
         };
       ",
         },
+        "Environment": {
+          "Variables": {
+            "SLACK_CHANNEL": "test-channel",
+          },
+        },
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
@@ -95,6 +100,13 @@ exports[`Snapshot testing Test Stack 1`] = `
         "EncryptionKey": "alias/aws/s3",
         "Environment": {
           "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": [
+            {
+              "Name": "SLACK_CHANNEL",
+              "Type": "PLAINTEXT",
+              "Value": "test-channel",
+            },
+          ],
           "Image": "aws/codebuild/standard:1.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": false,
