@@ -16,9 +16,9 @@ export class TestStack extends cdk.Stack {
           return context.logStreamName;
         };
       `),
-      // environment: {
-      //   "SLACK_CHANNEL": "test-channel",
-      // },
+      environment: {
+        "SLACK_CHANNEL": "test-channel",
+      },
     });
 
     const project = new aws_codebuild.Project(this, "TestProject", {
@@ -32,12 +32,12 @@ export class TestStack extends cdk.Stack {
           },
         },
       }),
-      // environmentVariables: {
-      //   "SLACK_CHANNEL": {
-      //     type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-      //     value: "test-channel",
-      //   },
-      // },
+      environmentVariables: {
+        "SLACK_CHANNEL": {
+          type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+          value: "test-channel",
+        },
+      },
     });
 
     new cdk.CfnOutput(this, "TestFunctionArn", { value: func.functionArn });
