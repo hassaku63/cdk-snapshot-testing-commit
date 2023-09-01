@@ -11,35 +11,29 @@ exports[`Snapshot testing Test Stack 1`] = `
   },
   "Resources": {
     "TestFunctionWithEnvADC2417D": {
-      "DependsOn": [
-        "TestFunctionWithEnvServiceRoleA6AA9548",
-      ],
-      "Properties": {
-        "Code": {
-          "ZipFile": "
-        exports.handler = async function (event, context) {
-          console.log("EVENT: 
-" + JSON.stringify(event, null, 2));
-          return context.logStreamName;
-        };
-      ",
-        },
-        "Environment": {
-          "Variables": {
-            "SLACK_CHANNEL": "test-channel",
-          },
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "TestFunctionWithEnvServiceRoleA6AA9548",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-      },
-      "Type": "AWS::Lambda::Function",
+  "Type": "AWS::Lambda::Function",
+  "Properties": {
+    "Code": {
+      "ZipFile": "\\n        exports.handler = async function (event, context) {\\n          console.log(\\"EVENT: \\n\\" + JSON.stringify(event, null, 2));\\n          return context.logStreamName;\\n        };\\n      "
     },
+    "Environment": {
+      "Variables": {
+        "SLACK_CHANNEL": "***"
+      }
+    },
+    "Handler": "index.handler",
+    "Role": {
+      "Fn::GetAtt": [
+        "TestFunctionWithEnvServiceRoleA6AA9548",
+        "Arn"
+      ]
+    },
+    "Runtime": "nodejs18.x"
+  },
+  "DependsOn": [
+    "TestFunctionWithEnvServiceRoleA6AA9548"
+  ]
+},
     "TestFunctionWithEnvServiceRoleA6AA9548": {
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -72,30 +66,24 @@ exports[`Snapshot testing Test Stack 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "TestFunctionWithoutEnvF040F9FB": {
-      "DependsOn": [
-        "TestFunctionWithoutEnvServiceRole5D1C6DCC",
-      ],
-      "Properties": {
-        "Code": {
-          "ZipFile": "
-        exports.handler = async function (event, context) {
-          console.log("EVENT: 
-" + JSON.stringify(event, null, 2));
-          return context.logStreamName;
-        };
-      ",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "TestFunctionWithoutEnvServiceRole5D1C6DCC",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-      },
-      "Type": "AWS::Lambda::Function",
+  "Type": "AWS::Lambda::Function",
+  "Properties": {
+    "Code": {
+      "ZipFile": "\\n        exports.handler = async function (event, context) {\\n          console.log(\\"EVENT: \\n\\" + JSON.stringify(event, null, 2));\\n          return context.logStreamName;\\n        };\\n      "
     },
+    "Handler": "index.handler",
+    "Role": {
+      "Fn::GetAtt": [
+        "TestFunctionWithoutEnvServiceRole5D1C6DCC",
+        "Arn"
+      ]
+    },
+    "Runtime": "nodejs18.x"
+  },
+  "DependsOn": [
+    "TestFunctionWithoutEnvServiceRole5D1C6DCC"
+  ]
+},
     "TestFunctionWithoutEnvServiceRole5D1C6DCC": {
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -128,50 +116,41 @@ exports[`Snapshot testing Test Stack 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "TestProjectWithEnv44BBE9D1": {
-      "Properties": {
-        "Artifacts": {
-          "Type": "NO_ARTIFACTS",
-        },
-        "Cache": {
-          "Type": "NO_CACHE",
-        },
-        "EncryptionKey": "alias/aws/s3",
-        "Environment": {
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "EnvironmentVariables": [
-            {
-              "Name": "SLACK_CHANNEL",
-              "Type": "PLAINTEXT",
-              "Value": "test-channel",
-            },
-          ],
-          "Image": "aws/codebuild/standard:1.0",
-          "ImagePullCredentialsType": "CODEBUILD",
-          "PrivilegedMode": false,
-          "Type": "LINUX_CONTAINER",
-        },
-        "ServiceRole": {
-          "Fn::GetAtt": [
-            "TestProjectWithEnvRoleA3D98701",
-            "Arn",
-          ],
-        },
-        "Source": {
-          "BuildSpec": "{
-  "version": "0.2",
-  "phases": {
-    "build": {
-      "commands": [
-        "echo hello world"
+  "Type": "AWS::CodeBuild::Project",
+  "Properties": {
+    "Artifacts": {
+      "Type": "NO_ARTIFACTS"
+    },
+    "Cache": {
+      "Type": "NO_CACHE"
+    },
+    "EncryptionKey": "alias/aws/s3",
+    "Environment": {
+      "ComputeType": "BUILD_GENERAL1_SMALL",
+      "EnvironmentVariables": [
+        {
+          "Name": "SLACK_CHANNEL",
+          "Type": "PLAINTEXT",
+          "Value": "***"
+        }
+      ],
+      "Image": "aws/codebuild/standard:1.0",
+      "ImagePullCredentialsType": "CODEBUILD",
+      "PrivilegedMode": false,
+      "Type": "LINUX_CONTAINER"
+    },
+    "ServiceRole": {
+      "Fn::GetAtt": [
+        "TestProjectWithEnvRoleA3D98701",
+        "Arn"
       ]
+    },
+    "Source": {
+      "BuildSpec": "{\\n  \\"version\\": \\"0.2\\",\\n  \\"phases\\": {\\n    \\"build\\": {\\n      \\"commands\\": [\\n        \\"echo hello world\\"\\n      ]\\n    }\\n  }\\n}",
+      "Type": "NO_SOURCE"
     }
   }
-}",
-          "Type": "NO_SOURCE",
-        },
-      },
-      "Type": "AWS::CodeBuild::Project",
-    },
+},
     "TestProjectWithEnvRoleA3D98701": {
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -297,43 +276,34 @@ exports[`Snapshot testing Test Stack 1`] = `
       "Type": "AWS::IAM::Policy",
     },
     "TestProjectWithoutEnv5547A82C": {
-      "Properties": {
-        "Artifacts": {
-          "Type": "NO_ARTIFACTS",
-        },
-        "Cache": {
-          "Type": "NO_CACHE",
-        },
-        "EncryptionKey": "alias/aws/s3",
-        "Environment": {
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/standard:1.0",
-          "ImagePullCredentialsType": "CODEBUILD",
-          "PrivilegedMode": false,
-          "Type": "LINUX_CONTAINER",
-        },
-        "ServiceRole": {
-          "Fn::GetAtt": [
-            "TestProjectWithoutEnvRole84EA8F64",
-            "Arn",
-          ],
-        },
-        "Source": {
-          "BuildSpec": "{
-  "version": "0.2",
-  "phases": {
-    "build": {
-      "commands": [
-        "echo hello world"
+  "Type": "AWS::CodeBuild::Project",
+  "Properties": {
+    "Artifacts": {
+      "Type": "NO_ARTIFACTS"
+    },
+    "Cache": {
+      "Type": "NO_CACHE"
+    },
+    "EncryptionKey": "alias/aws/s3",
+    "Environment": {
+      "ComputeType": "BUILD_GENERAL1_SMALL",
+      "Image": "aws/codebuild/standard:1.0",
+      "ImagePullCredentialsType": "CODEBUILD",
+      "PrivilegedMode": false,
+      "Type": "LINUX_CONTAINER"
+    },
+    "ServiceRole": {
+      "Fn::GetAtt": [
+        "TestProjectWithoutEnvRole84EA8F64",
+        "Arn"
       ]
+    },
+    "Source": {
+      "BuildSpec": "{\\n  \\"version\\": \\"0.2\\",\\n  \\"phases\\": {\\n    \\"build\\": {\\n      \\"commands\\": [\\n        \\"echo hello world\\"\\n      ]\\n    }\\n  }\\n}",
+      "Type": "NO_SOURCE"
     }
   }
-}",
-          "Type": "NO_SOURCE",
-        },
-      },
-      "Type": "AWS::CodeBuild::Project",
-    },
+},
     "TestProjectWithoutEnvRole84EA8F64": {
       "Properties": {
         "AssumeRolePolicyDocument": {
