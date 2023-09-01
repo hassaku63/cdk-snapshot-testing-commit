@@ -3,8 +3,12 @@ import { Construct } from 'constructs';
 import * as aws_lambda from "aws-cdk-lib/aws-lambda";
 import * as aws_codebuild from "aws-cdk-lib/aws-codebuild";
 
+interface TestSlackProps extends cdk.StackProps {
+  slackChannelId: string;
+}
+
 export class TestStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: TestSlackProps) {
     super(scope, id, props);
 
     /**
@@ -22,9 +26,10 @@ export class TestStack extends cdk.Stack {
       `),
       environment: {
         // Note:
-        // ここでは簡単のため直接チャンネル名に相当する文字列を記述しているが、
-        // 実際には process.env から値を注入し、値がコミットされないように書く想定の箇所
-        "SLACK_CHANNEL": "test-channel",
+        // bin/ 配下のエントリポイントモジュールでは環境変数から取り込むような処理を記述している想定
+        // ただし、Construct クラスの実装としては環境変数かどうかの知識は持たず、単なるパラメータの1つとして扱う
+        // snapshot の作成時にこのクラスのインスタンスを作成する必要があるので、その際にダミー値を渡す。
+        "SLACK_CHANNEL": props.slackChannelId,
       },
     });
 
@@ -59,11 +64,12 @@ export class TestStack extends cdk.Stack {
       }),
       environmentVariables: {
         // Note:
-        // ここでは簡単のため直接チャンネル名に相当する文字列を記述しているが、
-        // 実際には process.env から値を注入し、値がコミットされないように書く想定の箇所
+        // bin/ 配下のエントリポイントモジュールでは環境変数から取り込むような処理を記述している想定
+        // ただし、Construct クラスの実装としては環境変数かどうかの知識は持たず、単なるパラメータの1つとして扱う
+        // snapshot の作成時にこのクラスのインスタンスを作成する必要があるので、その際にダミー値を渡す。
         "SLACK_CHANNEL": {
           type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-          value: "test-channel",
+          value: props.slackChannelId,
         },
       },
     });
