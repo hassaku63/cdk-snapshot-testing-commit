@@ -26,7 +26,7 @@ exports[`Snapshot testing Test Stack 1`] = `
         },
         "Environment": {
           "Variables": {
-            "SLACK_CHANNEL": "test-channel",
+            "SLACK_CHANNEL": "***",
           },
         },
         "Handler": "index.handler",
@@ -142,7 +142,7 @@ exports[`Snapshot testing Test Stack 1`] = `
             {
               "Name": "SLACK_CHANNEL",
               "Type": "PLAINTEXT",
-              "Value": "test-channel",
+              "Value": "***",
             },
           ],
           "Image": "aws/codebuild/standard:1.0",
