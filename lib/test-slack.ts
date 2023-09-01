@@ -7,7 +7,11 @@ export class TestStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const func = new aws_lambda.Function(this, "TestFunction", {
+    /**
+     * AWS::Lambda::Function
+     */
+    // 環境変数ありのパターン
+    new aws_lambda.Function(this, "TestFunctionWithEnv", {
       runtime: aws_lambda.Runtime.NODEJS_18_X,
       handler: "index.handler",
       code: aws_lambda.Code.fromInline(`
@@ -24,7 +28,25 @@ export class TestStack extends cdk.Stack {
       },
     });
 
-    const project = new aws_codebuild.Project(this, "TestProject", {
+    // 環境変数を持たないパターン
+    new aws_lambda.Function(this, "TestFunctionWithoutEnv", {
+      runtime: aws_lambda.Runtime.NODEJS_18_X,
+      handler: "index.handler",
+      code: aws_lambda.Code.fromInline(`
+        exports.handler = async function (event, context) {
+          console.log("EVENT: \n" + JSON.stringify(event, null, 2));
+          return context.logStreamName;
+        };
+      `),
+      // environment: {
+      // },
+    });
+
+    /**
+     * AWS::CodeBuild::Project
+     */
+    // 環境変数ありのパターン
+    new aws_codebuild.Project(this, "TestProjectWithEnv", {
       buildSpec: aws_codebuild.BuildSpec.fromObject({
         version: "0.2",
         phases: {
@@ -46,7 +68,20 @@ export class TestStack extends cdk.Stack {
       },
     });
 
-    new cdk.CfnOutput(this, "TestFunctionArn", { value: func.functionArn });
-    new cdk.CfnOutput(this, "TestProjectArn", { value: project.projectArn });
+    // 環境変数を持たないパターン;
+    new aws_codebuild.Project(this, "TestProjectWithoutEnv", {
+      buildSpec: aws_codebuild.BuildSpec.fromObject({
+        version: "0.2",
+        phases: {
+          build: {
+            commands: [
+              "echo hello world",
+            ],
+          },
+        },
+      }),
+      // environmentVariables: {
+      // },
+    });
   }
 }

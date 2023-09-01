@@ -2,24 +2,6 @@
 
 exports[`Snapshot testing Test Stack 1`] = `
 {
-  "Outputs": {
-    "TestFunctionArn": {
-      "Value": {
-        "Fn::GetAtt": [
-          "TestFunction22AD90FC",
-          "Arn",
-        ],
-      },
-    },
-    "TestProjectArn": {
-      "Value": {
-        "Fn::GetAtt": [
-          "TestProject2F1D5F9F",
-          "Arn",
-        ],
-      },
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -28,9 +10,9 @@ exports[`Snapshot testing Test Stack 1`] = `
     },
   },
   "Resources": {
-    "TestFunction22AD90FC": {
+    "TestFunctionWithEnvADC2417D": {
       "DependsOn": [
-        "TestFunctionServiceRole6ABD93C7",
+        "TestFunctionWithEnvServiceRoleA6AA9548",
       ],
       "Properties": {
         "Code": {
@@ -50,7 +32,7 @@ exports[`Snapshot testing Test Stack 1`] = `
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "TestFunctionServiceRole6ABD93C7",
+            "TestFunctionWithEnvServiceRoleA6AA9548",
             "Arn",
           ],
         },
@@ -58,7 +40,7 @@ exports[`Snapshot testing Test Stack 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "TestFunctionServiceRole6ABD93C7": {
+    "TestFunctionWithEnvServiceRoleA6AA9548": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -89,7 +71,63 @@ exports[`Snapshot testing Test Stack 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "TestProject2F1D5F9F": {
+    "TestFunctionWithoutEnvF040F9FB": {
+      "DependsOn": [
+        "TestFunctionWithoutEnvServiceRole5D1C6DCC",
+      ],
+      "Properties": {
+        "Code": {
+          "ZipFile": "
+        exports.handler = async function (event, context) {
+          console.log("EVENT: 
+" + JSON.stringify(event, null, 2));
+          return context.logStreamName;
+        };
+      ",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "TestFunctionWithoutEnvServiceRole5D1C6DCC",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "TestFunctionWithoutEnvServiceRole5D1C6DCC": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TestProjectWithEnv44BBE9D1": {
       "Properties": {
         "Artifacts": {
           "Type": "NO_ARTIFACTS",
@@ -114,7 +152,7 @@ exports[`Snapshot testing Test Stack 1`] = `
         },
         "ServiceRole": {
           "Fn::GetAtt": [
-            "TestProjectRole81829D51",
+            "TestProjectWithEnvRoleA3D98701",
             "Arn",
           ],
         },
@@ -134,7 +172,7 @@ exports[`Snapshot testing Test Stack 1`] = `
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "TestProjectRole81829D51": {
+    "TestProjectWithEnvRoleA3D98701": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -151,7 +189,7 @@ exports[`Snapshot testing Test Stack 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "TestProjectRoleDefaultPolicy0F91812C": {
+    "TestProjectWithEnvRoleDefaultPolicy3EB0D709": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -181,7 +219,7 @@ exports[`Snapshot testing Test Stack 1`] = `
                       },
                       ":log-group:/aws/codebuild/",
                       {
-                        "Ref": "TestProject2F1D5F9F",
+                        "Ref": "TestProjectWithEnv44BBE9D1",
                       },
                     ],
                   ],
@@ -204,7 +242,7 @@ exports[`Snapshot testing Test Stack 1`] = `
                       },
                       ":log-group:/aws/codebuild/",
                       {
-                        "Ref": "TestProject2F1D5F9F",
+                        "Ref": "TestProjectWithEnv44BBE9D1",
                       },
                       ":*",
                     ],
@@ -239,7 +277,7 @@ exports[`Snapshot testing Test Stack 1`] = `
                     },
                     ":report-group/",
                     {
-                      "Ref": "TestProject2F1D5F9F",
+                      "Ref": "TestProjectWithEnv44BBE9D1",
                     },
                     "-*",
                   ],
@@ -249,10 +287,172 @@ exports[`Snapshot testing Test Stack 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "TestProjectRoleDefaultPolicy0F91812C",
+        "PolicyName": "TestProjectWithEnvRoleDefaultPolicy3EB0D709",
         "Roles": [
           {
-            "Ref": "TestProjectRole81829D51",
+            "Ref": "TestProjectWithEnvRoleA3D98701",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TestProjectWithoutEnv5547A82C": {
+      "Properties": {
+        "Artifacts": {
+          "Type": "NO_ARTIFACTS",
+        },
+        "Cache": {
+          "Type": "NO_CACHE",
+        },
+        "EncryptionKey": "alias/aws/s3",
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/standard:1.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER",
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "TestProjectWithoutEnvRole84EA8F64",
+            "Arn",
+          ],
+        },
+        "Source": {
+          "BuildSpec": "{
+  "version": "0.2",
+  "phases": {
+    "build": {
+      "commands": [
+        "echo hello world"
+      ]
+    }
+  }
+}",
+          "Type": "NO_SOURCE",
+        },
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "TestProjectWithoutEnvRole84EA8F64": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TestProjectWithoutEnvRoleDefaultPolicy6838AF7A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "TestProjectWithoutEnv5547A82C",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "TestProjectWithoutEnv5547A82C",
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codebuild:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":report-group/",
+                    {
+                      "Ref": "TestProjectWithoutEnv5547A82C",
+                    },
+                    "-*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TestProjectWithoutEnvRoleDefaultPolicy6838AF7A",
+        "Roles": [
+          {
+            "Ref": "TestProjectWithoutEnvRole84EA8F64",
           },
         ],
       },
