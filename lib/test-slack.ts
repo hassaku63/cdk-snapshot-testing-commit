@@ -17,6 +17,9 @@ export class TestStack extends cdk.Stack {
         };
       `),
       environment: {
+        // Note:
+        // ここでは簡単のため直接チャンネル名に相当する文字列を記述しているが、
+        // 実際には process.env から値を注入し、値がコミットされないように書く想定の箇所
         "SLACK_CHANNEL": "test-channel",
       },
     });
@@ -33,6 +36,9 @@ export class TestStack extends cdk.Stack {
         },
       }),
       environmentVariables: {
+        // Note:
+        // ここでは簡単のため直接チャンネル名に相当する文字列を記述しているが、
+        // 実際には process.env から値を注入し、値がコミットされないように書く想定の箇所
         "SLACK_CHANNEL": {
           type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
           value: "test-channel",
